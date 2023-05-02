@@ -169,26 +169,16 @@ CREATE TABLE `Comanda` (
   `id_Comanda` int(11) NOT NULL AUTO_INCREMENT,
   `dia_hora` datetime NOT NULL,
   `entrega` char(1) NOT NULL COMMENT 'Tipo de repartiment:\\\\\\\\nB = Botiga\\\\\\\\nD = Domicili',
-  `quantitat_producte` int(11) NOT NULL,
-  `id_Pizza` int(11) NOT NULL DEFAULT '0',
-  `id_Hamburguesa` int(11) NOT NULL DEFAULT '0',
-  `id_Beguda` int(11) NOT NULL DEFAULT '0',
   `id_Client` int(11) NOT NULL,
   `id_Botiga` int(11) NOT NULL,
   `id_Empleat` int(11) NOT NULL,
   PRIMARY KEY (`id_Comanda`),
-  KEY `fk_Hamburguesa1_idx` (`id_Hamburguesa`),
-  KEY `fk_Beguda1_idx` (`id_Beguda`),
-  KEY `fk_Pizza2_idx` (`id_Pizza`),
   KEY `fk_Client1_idx` (`id_Client`),
   KEY `fk_Botiga2_idx` (`id_Botiga`),
   KEY `fk_Empleat3_idx` (`id_Empleat`),
-  CONSTRAINT `fk_Beguda1` FOREIGN KEY (`id_Beguda`) REFERENCES `beguda` (`id_beguda`) ON DELETE CASCADE,
   CONSTRAINT `fk_Botiga2` FOREIGN KEY (`id_Botiga`) REFERENCES `botiga` (`id_botiga`) ON DELETE CASCADE,
   CONSTRAINT `fk_Client1` FOREIGN KEY (`id_Client`) REFERENCES `client` (`id_client`) ON DELETE CASCADE,
-  CONSTRAINT `fk_Empleat3` FOREIGN KEY (`id_Empleat`) REFERENCES `empleat` (`id_empleat`) ON DELETE CASCADE,
-  CONSTRAINT `fk_Hamburguesa1` FOREIGN KEY (`id_Hamburguesa`) REFERENCES `hamburguesa` (`id_hamburguesa`) ON DELETE CASCADE,
-  CONSTRAINT `fk_Pizza2` FOREIGN KEY (`id_Pizza`) REFERENCES `pizza` (`id_pizza`) ON DELETE CASCADE
+  CONSTRAINT `fk_Empleat3` FOREIGN KEY (`id_Empleat`) REFERENCES `empleat` (`id_empleat`) ON DELETE CASCADE
 ) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -198,7 +188,7 @@ CREATE TABLE `Comanda` (
 
 LOCK TABLES `Comanda` WRITE;
 /*!40000 ALTER TABLE `Comanda` DISABLE KEYS */;
-INSERT INTO `Comanda` VALUES (1,'2022-03-22 19:30:00','B',3,2,1,2,7,1,2),(2,'2020-03-22 18:45:00','D',1,2,1,1,2,2,5),(3,'2019-03-22 22:00:00','B',2,2,1,1,3,1,3),(4,'2022-03-22 21:50:00','D',1,2,3,1,5,3,2),(5,'2021-03-22 21:15:00','D',2,3,2,4,2,1,1);
+INSERT INTO `Comanda` VALUES (1,'2022-03-22 19:30:00','B',7,1,2),(2,'2020-03-22 18:45:00','D',2,2,5),(3,'2019-03-22 22:00:00','B',3,1,3),(4,'2022-03-22 21:50:00','D',5,3,2),(5,'2021-03-22 21:15:00','D',2,1,1);
 /*!40000 ALTER TABLE `Comanda` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -214,7 +204,7 @@ CREATE TABLE `Cuiner` (
   `id_Empleat` int(11) NOT NULL,
   PRIMARY KEY (`id_Cuiner`),
   KEY `fk_Empleat1_idx` (`id_Empleat`),
-  CONSTRAINT `fk_Empleat1` FOREIGN KEY (`id_Empleat`) REFERENCES `empleat` (`id_Empleat`) ON DELETE CASCADE ON UPDATE CASCADE
+  CONSTRAINT `fk_Empleat1` FOREIGN KEY (`id_Empleat`) REFERENCES `empleat` (`id_empleat`) ON DELETE CASCADE
 ) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -226,6 +216,90 @@ LOCK TABLES `Cuiner` WRITE;
 /*!40000 ALTER TABLE `Cuiner` DISABLE KEYS */;
 INSERT INTO `Cuiner` VALUES (1,2),(2,5);
 /*!40000 ALTER TABLE `Cuiner` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `detallBeguda`
+--
+
+DROP TABLE IF EXISTS `detallBeguda`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+ SET character_set_client = utf8mb4 ;
+CREATE TABLE `detallBeguda` (
+  `id_Comanda` int(11) NOT NULL,
+  `id_Beguda` int(11) NOT NULL,
+  `quantitat` int(11) NOT NULL,
+  KEY `fk_Comanda4_idx` (`id_Comanda`),
+  KEY `fk_Beguda1_idx` (`id_Beguda`),
+  CONSTRAINT `fk_Beguda1` FOREIGN KEY (`id_Beguda`) REFERENCES `beguda` (`id_beguda`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `fk_Comanda4` FOREIGN KEY (`id_Comanda`) REFERENCES `comanda` (`id_comanda`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `detallBeguda`
+--
+
+LOCK TABLES `detallBeguda` WRITE;
+/*!40000 ALTER TABLE `detallBeguda` DISABLE KEYS */;
+INSERT INTO `detallBeguda` VALUES (1,2,4),(2,3,2),(3,2,2),(4,1,2),(5,3,3);
+/*!40000 ALTER TABLE `detallBeguda` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `detallHamburguesa`
+--
+
+DROP TABLE IF EXISTS `detallHamburguesa`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+ SET character_set_client = utf8mb4 ;
+CREATE TABLE `detallHamburguesa` (
+  `id_Comanda` int(11) NOT NULL,
+  `id_Hamburguesa` int(11) NOT NULL,
+  `quantitat` int(11) NOT NULL,
+  KEY `fk_Comanda3_idx` (`id_Comanda`),
+  KEY `fk_Hamburguesa1_idx` (`id_Hamburguesa`),
+  CONSTRAINT `fk_Comanda3` FOREIGN KEY (`id_Comanda`) REFERENCES `comanda` (`id_comanda`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `fk_Hamburguesa1` FOREIGN KEY (`id_Hamburguesa`) REFERENCES `hamburguesa` (`id_hamburguesa`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `detallHamburguesa`
+--
+
+LOCK TABLES `detallHamburguesa` WRITE;
+/*!40000 ALTER TABLE `detallHamburguesa` DISABLE KEYS */;
+INSERT INTO `detallHamburguesa` VALUES (1,4,4),(2,3,2),(3,4,2),(4,5,2),(5,2,3);
+/*!40000 ALTER TABLE `detallHamburguesa` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `detallPizza`
+--
+
+DROP TABLE IF EXISTS `detallPizza`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+ SET character_set_client = utf8mb4 ;
+CREATE TABLE `detallPizza` (
+  `id_Comanda` int(11) NOT NULL,
+  `id_Pizza` int(11) NOT NULL,
+  `quantitat` int(11) NOT NULL,
+  KEY `fk_Comanda2_idx` (`id_Comanda`),
+  KEY `fk_Pizza2_idx` (`id_Pizza`),
+  CONSTRAINT `fk_Comanda2` FOREIGN KEY (`id_Comanda`) REFERENCES `comanda` (`id_comanda`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `fk_Pizza2` FOREIGN KEY (`id_Pizza`) REFERENCES `pizza` (`id_pizza`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `detallPizza`
+--
+
+LOCK TABLES `detallPizza` WRITE;
+/*!40000 ALTER TABLE `detallPizza` DISABLE KEYS */;
+INSERT INTO `detallPizza` VALUES (1,4,4),(1,6,4),(2,5,1),(2,3,2),(3,6,2),(4,5,2),(4,5,2),(5,1,2);
+/*!40000 ALTER TABLE `detallPizza` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
@@ -246,8 +320,8 @@ CREATE TABLE `Empleat` (
   PRIMARY KEY (`id_Empleat`),
   UNIQUE KEY `nif_UNIQUE` (`nif`),
   KEY `fk_Botiga1_idx` (`id_Botiga`),
-  CONSTRAINT `fk_Botiga1` FOREIGN KEY (`id_Botiga`) REFERENCES `botiga` (`id_botiga`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+  CONSTRAINT `fk_Botiga1` FOREIGN KEY (`id_Botiga`) REFERENCES `botiga` (`id_botiga`) ON DELETE CASCADE
+) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -379,4 +453,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2023-04-30 17:35:28
+-- Dump completed on 2023-05-02  8:55:01
